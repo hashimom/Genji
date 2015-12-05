@@ -26,3 +26,6 @@
 *.exe
 *.out
 *.app
+
+# unidic(for test)
+lib/fujitsubo/unidic
