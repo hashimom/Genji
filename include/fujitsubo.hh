@@ -1,4 +1,4 @@
-/* Copyright (c) 2015 Masahiko Hashimoto <hashimom@geeko.jp>
+/* Copyright (c) 2016 Masahiko Hashimoto <hashimom@geeko.jp>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -18,46 +18,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
 */
+#ifndef INCLUDE_FUJISTUBO_H_
+#define INCLUDE_FUJISTUBO_H_
 
-#include <iostream>
-#include <string>
-#include <aoi.h>
+#include "ux/ux.hpp"
 
-int main()
-{
-	int mode = 0;
-	int i;
-	std::string str;
-	AOI_STR *aoistr;
 
-	aoistr = aoi_new();
+typedef struct {
+	std::string word;
+	std::string yomi;
+	double prob;
+} KSG_DIC;
 
-	while (1) {
-		if (mode == 0)
-			std::cout << "源氏: かな漢字変換モード)" << std::endl;
-		else
-			std::cout << "源氏: 形態素解析モード)" << std::endl; /* 未サポート */
+typedef struct {
+	std::string word;
+	double prob;
+} GNJ_TRIEVAL;
 
-		std::cin >> str;
+class Fujitsubo {
+public:
+	int build();
 
-		/* 終了 */
-		if (str == "!q") {
-			break;
-		}
-		/* クリア */
-		if (str == "!c") {
-			aoi_clear(aoistr);
-			std::cout << "【文字列クリア】" << std::endl;
-		}
-		/* 変換 */
-		else {
-			for (i = 0; i < str.length(); i++) {
-				aoi_input(aoistr, str.at(i));
-			}
-			std::cout << aoistr->workstr << std::endl;
-		}
-	}
+private:
+	void readKsgDic(std::string instr, KSG_DIC &out);
+	int buildTrie(std::vector<KSG_DIC> &ksgDic);
 
-	std::cout << "お疲れ様でした！" << std::endl;
-	return(0);
-}
+};
+
+
+#endif /* INCLUDE_FUJISTUBO_H_ */

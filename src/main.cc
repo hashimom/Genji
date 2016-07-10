@@ -18,31 +18,53 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
 */
-#ifndef INCLUDE_KASUGA_H_
-#define INCLUDE_KASUGA_H_
 
-#include "ux/ux.hpp"
+#include <iostream>
+#include <string>
+#include "aoi.h"
+#include "fujitsubo.hh"
 
+int main()
+{
+	int mode = 0;
+	int i;
+	std::string str;
+	AOI_STR *aoistr;
 
-typedef struct {
-	int hinshi;
-	int cost;
-} KasugaDic_info_t;
-
-class ksgDic {
-public:
-	int build();
-
-private:
-	void keyListAppend(const char *word, const char *yomi, int hinshi, int cost);
-	void readHeaderDic();
-	ux::Map<KasugaDic_info_t> wordTrie;
-	ux::Map<ux::id_t> yomiTrie;
-
-	std::vector<std::string> wordKeyList;
-	std::map<std::string, std::string> yomiMap;
-	std::map<std::string, KasugaDic_info_t> wordMap;
-};
+	Fujitsubo fjtb;
+	fjtb.build();
 
 
-#endif /* INCLUDE_KASUGA_H_ */
+#if 0
+	aoistr = aoi_new();
+
+	while (1) {
+		if (mode == 0)
+			std::cout << "源氏: かな漢字変換モード)" << std::endl;
+		else
+			std::cout << "源氏: 形態素解析モード)" << std::endl; /* 未サポート */
+
+		std::cin >> str;
+
+		/* 終了 */
+		if (str == "!q") {
+			break;
+		}
+		/* クリア */
+		if (str == "!c") {
+			aoi_clear(aoistr);
+			std::cout << "【文字列クリア】" << std::endl;
+		}
+		/* 変換 */
+		else {
+			for (i = 0; i < str.length(); i++) {
+				aoi_input(aoistr, str.at(i));
+			}
+			std::cout << aoistr->workstr << std::endl;
+		}
+	}
+#endif
+
+	std::cout << "お疲れ様でした！" << std::endl;
+	return(0);
+}

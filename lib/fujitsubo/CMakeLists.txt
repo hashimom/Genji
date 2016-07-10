@@ -1,8 +1,5 @@
-# ADD_LIBRARY(kasuga STATIC   
-#  ksgDic.cpp)
+ADD_LIBRARY(fujitsubo STATIC   
+  fujitsubo.cc
+)
 
-TARGET_LINK_LIBRARIES(kasuga ux)
-
-ADD_SUBDIRECTORY(ksgDic)
-ADD_SUBDIRECTORY(ksgSearch)
-ADD_SUBDIRECTORY(ux)
+TARGET_LINK_LIBRARIES(fujitsubo ux)

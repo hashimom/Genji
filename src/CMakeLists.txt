@@ -1,9 +1,11 @@
 # build Genji
 ADD_EXECUTABLE(genji  
-  main.cpp)
+  main.cc
+)
 
 INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/include)
 
 TARGET_LINK_LIBRARIES(genji aoi)
+TARGET_LINK_LIBRARIES(genji fujitsubo)
 
 INSTALL(TARGETS genji DESTINATION bin)
