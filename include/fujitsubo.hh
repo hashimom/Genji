@@ -18,11 +18,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
 */
-#ifndef INCLUDE_FUJISTUBO_H_
-#define INCLUDE_FUJISTUBO_H_
+#ifndef INCLUDE_FUJISTUBO_HH_
+#define INCLUDE_FUJISTUBO_HH_
 
 #include "ux/ux.hpp"
 
+namespace Genji {
 
 typedef struct {
 	std::string word;
@@ -31,19 +32,21 @@ typedef struct {
 } KSG_DIC;
 
 typedef struct {
-	std::string word;
+	ux::id_t id;
+	size_t len;
 	double prob;
-} GNJ_TRIEVAL;
+} GNJ_MAPVAL;
 
 class Fujitsubo {
 public:
-	int build();
+	int Build();
 
 private:
-	void readKsgDic(std::string instr, KSG_DIC &out);
+	void readKsgDic(const char *instr, KSG_DIC &out);
 	int buildTrie(std::vector<KSG_DIC> &ksgDic);
 
 };
 
+} // namespace Genji
 
-#endif /* INCLUDE_FUJISTUBO_H_ */
+#endif /* INCLUDE_FUJISTUBO_HH_ */

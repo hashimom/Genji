@@ -31,7 +31,9 @@
 #include "config.h"
 #include "fujitsubo.hh"
 
-int Fujitsubo::build()
+namespace Genji {
+
+int Fujitsubo::Build()
 {
 	int cnt = 0;
 	std::string row;
@@ -46,7 +48,7 @@ int Fujitsubo::build()
 
 	/* Dic read from Kasuga CSV file */
 	while (std::getline(ifs, row)) {
-		readKsgDic(row, tmpDicVal);
+		readKsgDic(row.c_str(), tmpDicVal);
 		ksgDic.push_back(tmpDicVal);
 	}
 
@@ -56,7 +58,7 @@ int Fujitsubo::build()
 	return(cnt);
 }
 
-void Fujitsubo::readKsgDic(std::string instr, KSG_DIC &out)
+void Fujitsubo::readKsgDic(const char *instr, KSG_DIC &out)
 {
 	std::string token;
 	std::stringstream ss;
@@ -83,21 +85,37 @@ void Fujitsubo::readKsgDic(std::string instr, KSG_DIC &out)
 int Fujitsubo::buildTrie(std::vector<KSG_DIC> &ksgDic)
 {
 	int i;
-	GNJ_TRIEVAL tmpTrieVal;
-	std::map<std::string, GNJ_TRIEVAL> gnjTrieMap;
-	ux::Map<GNJ_TRIEVAL> gnjTrie;
-	std::ofstream gnjdicofs(GENJI_DIC_NAME);
+	size_t len;
+	GNJ_MAPVAL tmpMapVal;
+	std::vector<std::string> wordList;
+	std::map<std::string, GNJ_MAPVAL> yomiList;
+	ux::Map<GNJ_MAPVAL> gnjYomiMap;
+	std::ofstream gnjYomiDicOfs(GENJI_YOMIDIC_NAME);
+	std::ofstream gnjWordDicOfs(GENJI_WORDDIC_NAME);
 
+	// build Word Trie
 	for (i = 0; i < ksgDic.size(); i++) {
-		tmpTrieVal.word = ksgDic[i].word;
-		tmpTrieVal.prob = ksgDic[i].prob;
-		gnjTrieMap[ksgDic[i].yomi] = tmpTrieVal;
-		std::cout << ksgDic[i].yomi << "/" << ksgDic[i].word << ", " <<  ksgDic[i].prob << std::endl;
+		wordList.push_back(ksgDic[i].word);
 	}
+	ux::Trie gnjWordTrie(wordList);
+	gnjWordTrie.save(gnjWordDicOfs);
 
-	// build and save
-	gnjTrie.build(gnjTrieMap);
-	gnjTrie.save(gnjdicofs);
+
+	// build Yomi Map
+	for (i = 0; i < ksgDic.size(); i++) {
+		tmpMapVal.id = gnjWordTrie.prefixSearch(ksgDic[i].word.c_str(), ksgDic[i].word.length(), len);
+		tmpMapVal.len = ksgDic[i].yomi.length();
+		tmpMapVal.prob = ksgDic[i].prob;
+		yomiList[ksgDic[i].yomi] = tmpMapVal;
+//		std::cout << ksgDic[i].yomi << "/"
+//				<< ksgDic[i].word << ", "
+//				<<  ksgDic[i].prob << std::endl;
+	}
+	gnjYomiMap.build(yomiList);
+	gnjYomiMap.save(gnjYomiDicOfs);
 
 	return(i);
 }
+
+} // namespace Genji
+

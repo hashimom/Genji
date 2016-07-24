@@ -27,8 +27,11 @@
 /* Kasuga dictionary filename */
 #define KASUGA_DIC_CSVNAME	"@KASUGA_DIC_CSVNAME@"
 
-/* Genji dictionary filename */
-#define GENJI_DIC_NAME		"@GENJI_DIC_NAME@"
+/* Genji Yomi dictionary filename */
+#define GENJI_YOMIDIC_NAME	"@GENJI_YOMIDIC_NAME@"
+
+/* Genji Word dictionary filename */
+#define GENJI_WORDDIC_NAME	"@GENJI_WORDDIC_NAME@"
 
 
 #endif /* INCLUDE_CONFIG_H_IN_ */

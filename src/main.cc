@@ -23,19 +23,23 @@
 #include <string>
 #include "aoi.h"
 #include "fujitsubo.hh"
+#include "murasaki.hh"
+
+using namespace Genji;
 
 int main()
 {
 	int mode = 0;
 	int i;
-	std::string str;
+	std::string str, outstr;
 	AOI_STR *aoistr;
 
 	Fujitsubo fjtb;
-	fjtb.build();
+	fjtb.Build();
 
+	Murasaki mrsk;
+	mrsk.Open();
 
-#if 0
 	aoistr = aoi_new();
 
 	while (1) {
@@ -59,11 +63,12 @@ int main()
 		else {
 			for (i = 0; i < str.length(); i++) {
 				aoi_input(aoistr, str.at(i));
+				mrsk.Convert((const char*)aoistr->workstr, outstr);
 			}
 			std::cout << aoistr->workstr << std::endl;
+			std::cout << outstr << std::endl;
 		}
 	}
-#endif
 
 	std::cout << "お疲れ様でした！" << std::endl;
 	return(0);

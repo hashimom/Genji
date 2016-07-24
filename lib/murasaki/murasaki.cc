@@ -19,19 +19,39 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
 */
+#include <fstream>
+#include <string>
+#include "config.h"
+#include "murasaki.hh"
+#include "graph.hh"
 
-#ifndef INCLUDE_CONFIG_H_IN_
-#define INCLUDE_CONFIG_H_IN_
+namespace Genji {
 
+void Murasaki::Open()
+{
+	std::ifstream gnjYomiDicIfs(GENJI_YOMIDIC_NAME);
+	std::ifstream gnjWordDicIfs(GENJI_WORDDIC_NAME);
 
-/* Kasuga dictionary filename */
-#define KASUGA_DIC_CSVNAME	"/home/hashimom/work/Genji/dic//kasugadic.csv"
+	gnjYomiMap = new ux::Map<GNJ_MAPVAL>;
+	gnjYomiMap->load(gnjYomiDicIfs);
 
-/* Genji Yomi dictionary filename */
-#define GENJI_YOMIDIC_NAME	"/home/hashimom/work/Genji/dic//genji_yomidic.dat"
+	gnjWordTrie = new ux::Trie;
+	gnjWordTrie->load(gnjWordDicIfs);
+}
 
-/* Genji Word dictionary filename */
-#define GENJI_WORDDIC_NAME	"/home/hashimom/work/Genji/dic//genji_worddic.dat"
+void Murasaki::Convert(const char *kana, std::string &ret)
+{
+	Graph graph;
 
+	graph.Initialize(gnjYomiMap, kana);
+	graph.Construct(gnjWordTrie, ret);
+}
 
-#endif /* INCLUDE_CONFIG_H_IN_ */
+void Murasaki::Close()
+{
+	delete gnjYomiMap;
+	delete gnjWordTrie;
+}
+
+} // namespace Genji
+

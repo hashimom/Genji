@@ -128,20 +128,6 @@ public:
   }
 
   /**
-   * Set a value from id (Kasuga Original)
-   * @param ind ID
-   * @param v  A value to be associated for a key
-   * @return 0 on success and -1 if not found
-   */
-  int setfromId(const size_t ind, const V& v){
-    if (ind == NOTFOUND){
-      return -1;
-    }
-    vs_[ind] = v;
-    return 0;
-  }
-
-  /**
    * Return the longest key that matches the prefix of the query in the dictionary
    * @param str the query
    * @param len the length of the query
@@ -181,7 +167,7 @@ public:
   size_t commonPrefixSearch(const char* str, size_t len, std::vector<V>& vs, size_t limit = LIMIT_DEFAULT) const {
     vs.clear();
     std::vector<id_t> retIDs;
-    commonPrefixSearch(str, len, retIDs, limit);
+    trie_.commonPrefixSearch(str, len, retIDs, limit);
     vs.resize(retIDs.size());
     for (size_t i = 0; i < retIDs.size(); ++i){
       vs[i] = vs_[retIDs[i]];

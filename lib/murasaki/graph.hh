@@ -20,18 +20,30 @@
  * SOFTWARE.
 */
 
-#ifndef INCLUDE_CONFIG_H_IN_
-#define INCLUDE_CONFIG_H_IN_
+#ifndef LIB_MURASAKI_GRAPH_HH_
+#define LIB_MURASAKI_GRAPH_HH_
 
+#include "murasaki.hh"
 
-/* Kasuga dictionary filename */
-#define KASUGA_DIC_CSVNAME	"/home/hashimom/work/Genji/dic//kasugadic.csv"
+namespace Genji {
 
-/* Genji Yomi dictionary filename */
-#define GENJI_YOMIDIC_NAME	"/home/hashimom/work/Genji/dic//genji_yomidic.dat"
+typedef struct {
+	std::vector<GNJ_MAPVAL> node;
+	int strIdx;
+	int strLen;
+	std::string maxWord;
+	double maxProb;
+} MRSK_NODES;
 
-/* Genji Word dictionary filename */
-#define GENJI_WORDDIC_NAME	"/home/hashimom/work/Genji/dic//genji_worddic.dat"
+class Graph {
+public:
+	int Initialize(ux::Map<GNJ_MAPVAL> *gnjYomiMap, const char *instr);
+	void Construct(ux::Trie *gnjWordTrie, std::string &outStr);
 
+private:
+	std::vector<MRSK_NODES> nodes;
+};
 
-#endif /* INCLUDE_CONFIG_H_IN_ */
+} // namespace Genji
+
+#endif /* LIB_MURASAKI_GRAPH_HH_ */

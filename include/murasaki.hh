@@ -1,5 +1,4 @@
-/*
- /* Copyright (c) 2016 Masahiko Hashimoto <hashimom@geeko.jp>
+/* Copyright (c) 2016 Masahiko Hashimoto <hashimom@geeko.jp>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,19 +18,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
 */
+#ifndef INCLUDE_MURASAKI_HH_
+#define INCLUDE_MURASAKI_HH_
 
-#ifndef INCLUDE_CONFIG_H_IN_
-#define INCLUDE_CONFIG_H_IN_
+#include <string>
+#include "ux/ux.hpp"
+#include "fujitsubo.hh"
 
-
-/* Kasuga dictionary filename */
-#define KASUGA_DIC_CSVNAME	"/home/hashimom/work/Genji/dic//kasugadic.csv"
-
-/* Genji Yomi dictionary filename */
-#define GENJI_YOMIDIC_NAME	"/home/hashimom/work/Genji/dic//genji_yomidic.dat"
-
-/* Genji Word dictionary filename */
-#define GENJI_WORDDIC_NAME	"/home/hashimom/work/Genji/dic//genji_worddic.dat"
+namespace Genji {
 
 
-#endif /* INCLUDE_CONFIG_H_IN_ */
+class Murasaki {
+public:
+	void Open();
+	void Convert(const char *kana, std::string &ret);
+	void Close();
+
+private:
+	ux::Map<GNJ_MAPVAL> *gnjYomiMap;
+	ux::Trie *gnjWordTrie;
+};
+
+} // namespace Genji
+
+#endif /* INCLUDE_MURASAKI_HH_ */

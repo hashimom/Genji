@@ -3,7 +3,8 @@ PROJECT(Genji)
 
 SET(GENJI_DIC_HOME     "${CMAKE_HOME_DIRECTORY}/dic/")
 SET(KASUGA_DIC_CSVNAME "${GENJI_DIC_HOME}/kasugadic.csv")
-SET(GENJI_DIC_NAME     "${GENJI_DIC_HOME}/genjidic.dat")
+SET(GENJI_YOMIDIC_NAME     "${GENJI_DIC_HOME}/genji_yomidic.dat")
+SET(GENJI_WORDDIC_NAME     "${GENJI_DIC_HOME}/genji_worddic.dat")
 
 #select the release build type by default to get optimization flags
 if(NOT CMAKE_BUILD_TYPE)
@@ -16,7 +17,7 @@ CONFIGURE_FILE(${PROJECT_SOURCE_DIR}/include/config.h.in ${PROJECT_SOURCE_DIR}/i
 INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/include)
 
 ADD_SUBDIRECTORY(lib/fujitsubo)
-#ADD_SUBDIRECTORY(lib/murasaki)
+ADD_SUBDIRECTORY(lib/murasaki)
 ADD_SUBDIRECTORY(lib/aoi)
 ADD_SUBDIRECTORY(lib/ux)
 ADD_SUBDIRECTORY(src)
