@@ -27,5 +27,5 @@
 *.out
 *.app
 
-# unidic(for test)
-lib/fujitsubo/unidic
+# for make
+build/

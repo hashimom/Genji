@@ -1,6 +1,6 @@
 INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/include/ux)
 
-ADD_LIBRARY(ux SHARED   
+ADD_LIBRARY(ux STATIC   
   uxTrie.cpp
   bitVec.cpp
   rsDic.cpp
