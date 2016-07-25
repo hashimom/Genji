@@ -20,6 +20,7 @@
 */
 
 #include <stdio.h>
+#include <string.h>
 #include "aoi.h"
 #include "aoidic.h"
 #include "aoistr.h"
@@ -42,9 +43,19 @@ AOI_STR *aoi_new()
 	return(ret_p);
 }
 
-void aoi_input(AOI_STR *aoistr, char inkey)
+void aoi_input(AOI_STR *aoistr, const char inkey)
 {
 	aoi_conv_input(aoistr, (uint8_t)inkey);
+}
+
+void aoi_convert(AOI_STR *aoistr, const char *instr)
+{
+	int i;
+	int len = strlen(instr);
+	aoi_clear(aoistr);
+	for (i = 0; i < len; i++) {
+		aoi_conv_input(aoistr, (uint8_t)instr[i]);
+	}
 }
 
 void aoi_clear(AOI_STR *aoistr)

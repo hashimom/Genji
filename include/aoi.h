@@ -60,7 +60,8 @@ extern "C" {
 #endif /* __cplusplus */
 
 extern AOI_STR *aoi_new();
-extern void aoi_input(AOI_STR *aoistr, char inkey);
+extern void aoi_input(AOI_STR *aoistr, const char inkey);
+extern void aoi_convert(AOI_STR *aoistr, const char *instr);
 extern void aoi_clear(AOI_STR *aoistr);
 
 #ifdef __cplusplus
