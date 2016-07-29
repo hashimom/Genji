@@ -29,5 +29,6 @@
 
 # for make
 build/
+dic/*
 
 
