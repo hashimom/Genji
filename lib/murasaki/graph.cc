@@ -1,5 +1,4 @@
-/*
- /* Copyright (c) 2016 Masahiko Hashimoto <hashimom@geeko.jp>
+/* Copyright (c) 2016 Masahiko Hashimoto <hashimom@geeko.jp>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -20,7 +19,6 @@
  * SOFTWARE.
 */
 
-#include <iostream>
 #include <cstring>
 #include "murasaki.hh"
 #include "graph.hh"
@@ -39,7 +37,7 @@ int Graph::Initialize(ux::Map<GNJ_MAPVAL> *gnjYomiMap, const char *instr)
 	tmp.strIdx = 0;
 	tmp.strLen = 0;
 	tmp.maxProb = 0;
-	nodes.push_back(tmp);
+	pos.push_back(tmp);
 
 	// for UTF-8
 	while(tmp.strLen < inLen){
@@ -55,59 +53,60 @@ int Graph::Initialize(ux::Map<GNJ_MAPVAL> *gnjYomiMap, const char *instr)
 			tmp.strLen += 5;
 		else // ( < 0xFE)
 			tmp.strLen += 6;
-		nodes.push_back(tmp);
+		pos.push_back(tmp);
 		tmp.strIdx = tmp.strLen;
 	}
 
 	// create nodes
-	for (i = 0; i < nodes.size(); i++) {
-		place = nodes[i].strIdx;
+	for (i = 0; i < pos.size(); i++) {
+		place = pos[i].strIdx;
 		retSize = gnjYomiMap->commonPrefixSearch(&(instr[place]), (inLen - place), mapVal, ux::LIMIT_DEFAULT);
-//		std::cout << retSize << " : " << std::endl;
 		for (j = 0; j < retSize; j++) {
 			endPlace = place + mapVal[j].len;
-//			std::cout << mapVal[j].id << ":" << mapVal[j].len << "/" << mapVal[j].prob << std::endl;
-			for (k = i; k < nodes.size(); k++) {
-				if (endPlace <= nodes[k].strLen)
+			for (k = i; k < pos.size(); k++) {
+				if (endPlace <= pos[k].strLen)
 					break;
 			}
-			nodes[k].node.push_back(mapVal[j]);
+			pos[k].node.push_back(mapVal[j]);
 		}
 	}
 
-	return(nodes.size());
+	return(pos.size());
 }
 
 void Graph::Construct(ux::Trie *gnjWordTrie, std::string &outStr)
 {
 	int i, j, k;
-	int tmpLen;
-	double tmpProb;
-	std::string tmpWord;
+	double compProb;
+	std::string compWord;
 
-	for (i = 0; i < nodes.size(); i++) {
-		for (j = 0; j < nodes[i].node.size(); j++) {
-			tmpWord = gnjWordTrie->decodeKey(nodes[i].node[j].id);
-			tmpProb = nodes[i].node[j].prob;
-			tmpLen  = nodes[i].node[j].len;
+	// １語ずつずらしながら辞書に登録された単語を取り出す
+	for (i = 0; i < pos.size(); i++) {
+		for (j = 0; j < pos[i].node.size(); j++) {
+			compWord = gnjWordTrie->decodeKey(pos[i].node[j].id);
+			compProb = pos[i].node[j].prob;
+			// 辞書に登録されていた語が空文字だった場合は以降の処理を行わない
+			if (compWord.length() == 0)
+				continue;
 
-			if (nodes[i].strLen != nodes[i].node[j].len) {
+			// 現在の位置までの文字の長さより辞書から取り出した語の方が短ければ、取り出した語の開智地点までの最短距離と結合する
+			if (pos[i].strLen != pos[i].node[j].len) {
 				for (k = 0; k < i; k++) {
-					if (nodes[i].strLen == (nodes[k].strLen + nodes[i].node[j].len)) {
-						tmpWord = nodes[k].maxWord + gnjWordTrie->decodeKey(nodes[i].node[j].id);
-						tmpProb = nodes[k].maxProb * nodes[i].node[j].prob;
+					if (pos[i].strLen == (pos[k].strLen + pos[i].node[j].len)) {
+						compWord = pos[k].maxWord + gnjWordTrie->decodeKey(pos[i].node[j].id);
+						compProb = pos[k].maxProb * pos[i].node[j].prob;
 						break;
 					}
 				}
 			}
 
-			if (nodes[i].maxProb < tmpProb) {
-				nodes[i].maxWord = tmpWord;
-				nodes[i].maxProb = tmpProb;
-
-				outStr = tmpWord;
+			// これまでの探索結果と比較
+			if (pos[i].maxProb < compProb) {
+				pos[i].maxWord = compWord;
+				pos[i].maxProb = compProb;
 			}
 		}
+		outStr = pos[i].maxWord;
 	}
 }
 

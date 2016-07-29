@@ -39,9 +39,12 @@ int main()
 
 	Murasaki mrsk;
 	mrsk.Open();
+	mrsk.Convert("わたしのなまえはなかのです", outstr);
+	std::cout << " [LAST] : "<< outstr << std::endl;
 
 	aoistr = aoi_new();
 
+#if 0
 	while (1) {
 		if (mode == 0)
 			std::cout << "源氏: かな漢字変換モード)" << std::endl;
@@ -69,6 +72,7 @@ int main()
 			std::cout << outstr << std::endl;
 		}
 	}
+#endif
 
 	std::cout << "お疲れ様でした！" << std::endl;
 	return(0);

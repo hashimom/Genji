@@ -41,7 +41,7 @@ public:
 	void Construct(ux::Trie *gnjWordTrie, std::string &outStr);
 
 private:
-	std::vector<MRSK_NODES> nodes;
+	std::vector<MRSK_NODES> pos;
 };
 
 } // namespace Genji
