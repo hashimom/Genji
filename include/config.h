@@ -23,6 +23,11 @@
 #ifndef INCLUDE_CONFIG_H_IN_
 #define INCLUDE_CONFIG_H_IN_
 
+/* Kasuga DB filename */
+#define KASUGA_DBNAME		"/home/hashimom/work/Genji/dic//kasuga.db"
+
+/* Kasuga corpus filename */
+#define KASUGA_CPS_CSVNAME	"/home/hashimom/work/Genji/dic//kasugacps.csv"
 
 /* Kasuga dictionary filename */
 #define KASUGA_DIC_CSVNAME	"/home/hashimom/work/Genji/dic//kasugadic.csv"

@@ -31,7 +31,24 @@
 #include "config.h"
 #include "fujitsubo.hh"
 
+using namespace Kasuga;
+
 namespace Genji {
+
+Fujitsubo::Fujitsubo()
+{
+	corpus.Open(KASUGA_DBNAME, KASUGA_CPS_CSVNAME);
+}
+
+Fujitsubo::~Fujitsubo()
+{
+	corpus.Close();
+}
+
+int Fujitsubo::Regist(std::string text)
+{
+	return(corpus.Regist(text));
+}
 
 int Fujitsubo::Build()
 {
@@ -39,6 +56,8 @@ int Fujitsubo::Build()
 	std::string row;
 	KSG_DIC tmpDicVal;
 	std::vector<KSG_DIC> ksgDic;
+
+	corpus.Get(KASUGA_DIC_CSVNAME);
 
 	std::ifstream ifs(KASUGA_DIC_CSVNAME);
 	if (!ifs) {

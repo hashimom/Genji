@@ -2,9 +2,11 @@ cmake_minimum_required(VERSION 2.8)
 PROJECT(Genji)
 
 SET(GENJI_DIC_HOME     "${CMAKE_HOME_DIRECTORY}/dic/")
+SET(KASUGA_DBNAME      "${GENJI_DIC_HOME}/kasuga.db")
+SET(KASUGA_CPS_CSVNAME "${GENJI_DIC_HOME}/kasugacps.csv")
 SET(KASUGA_DIC_CSVNAME "${GENJI_DIC_HOME}/kasugadic.csv")
-SET(GENJI_YOMIDIC_NAME     "${GENJI_DIC_HOME}/genji_yomidic.dat")
-SET(GENJI_WORDDIC_NAME     "${GENJI_DIC_HOME}/genji_worddic.dat")
+SET(GENJI_YOMIDIC_NAME "${GENJI_DIC_HOME}/genji_yomidic.dat")
+SET(GENJI_WORDDIC_NAME "${GENJI_DIC_HOME}/genji_worddic.dat")
 
 #select the release build type by default to get optimization flags
 if(NOT CMAKE_BUILD_TYPE)

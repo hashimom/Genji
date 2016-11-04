@@ -21,21 +21,18 @@
 
 #include <iostream>
 #include <string>
+#include <unistd.h>
 #include "aoi.h"
 #include "fujitsubo.hh"
 #include "murasaki.hh"
 
 using namespace Genji;
 
-int main()
+void kanakan()
 {
-	int mode = 0;
 	int i;
 	std::string str, outstr;
 	AOI_STR *aoistr;
-
-	Fujitsubo fjtb;
-	fjtb.Build();
 
 	Murasaki mrsk;
 	mrsk.Open();
@@ -43,11 +40,7 @@ int main()
 	aoistr = aoi_new();
 
 	while (1) {
-		if (mode == 0)
-			std::cout << "源氏: かな漢字変換モード)" << std::endl;
-		else
-			std::cout << "源氏: 形態素解析モード)" << std::endl; /* 未サポート */
-
+		std::cout << "源氏: かな漢字変換モード(quit: !q))" << std::endl;
 		std::cin >> str;
 
 		/* 終了 */
@@ -67,6 +60,44 @@ int main()
 			}
 			std::cout << aoistr->workstr << std::endl;
 			std::cout << outstr << std::endl;
+		}
+	}
+}
+
+void regist()
+{
+	std::string text;
+	Fujitsubo fjtb;
+
+	while(getline(std::cin, text)) {
+		fjtb.Regist(text);
+	}
+
+	fjtb.Build();
+}
+
+int main(int argc,char *argv[])
+{
+	int mode = 0;
+	int opt;
+	std::string str, outstr;
+	AOI_STR *aoistr;
+
+	while((opt = getopt(argc, argv, "cr")) != -1){
+		switch(opt){
+		// かな漢字変換モード
+		case 'c':
+			kanakan();
+			break;
+
+		// 辞書登録モード ※入力はパイプから
+		case 'r':
+			regist();
+			break;
+
+		default:
+			std::cout << "Usage / c:かな漢字変換 r:辞書登録" << std::endl;
+			break;
 		}
 	}
 

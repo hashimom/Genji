@@ -21,7 +21,10 @@
 #ifndef INCLUDE_FUJISTUBO_HH_
 #define INCLUDE_FUJISTUBO_HH_
 
+#include "kasuga.hh"
 #include "ux/ux.hpp"
+
+using namespace Kasuga;
 
 namespace Genji {
 
@@ -39,12 +42,15 @@ typedef struct {
 
 class Fujitsubo {
 public:
+	Fujitsubo();
+	virtual ~Fujitsubo();
+	int Regist(std::string text);
 	int Build();
 
 private:
 	void readKsgDic(const char *instr, KSG_DIC &out);
 	int buildTrie(std::vector<KSG_DIC> &ksgDic);
-
+	Corpus corpus;
 };
 
 } // namespace Genji
