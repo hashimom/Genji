@@ -45,6 +45,8 @@ public:
 	Fujitsubo();
 	virtual ~Fujitsubo();
 	int Regist(std::string text);
+	void RegistWord(std::string entry, std::string yomi);
+	void RegistBasicWords();
 	int Build();
 
 private:

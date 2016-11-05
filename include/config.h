@@ -32,6 +32,9 @@
 /* Kasuga dictionary filename */
 #define KASUGA_DIC_CSVNAME	"/home/hashimom/work/Genji/dic//kasugadic.csv"
 
+/* Kasuga BasicWors filename */
+#define KASUGA_BASICWORDS	"/home/hashimom/work/Genji/lib/fujitsubo/basicwords.txt"
+
 /* Genji Yomi dictionary filename */
 #define GENJI_YOMIDIC_NAME	"/home/hashimom/work/Genji/dic//genji_yomidic.dat"
 

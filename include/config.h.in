@@ -32,6 +32,9 @@
 /* Kasuga dictionary filename */
 #define KASUGA_DIC_CSVNAME	"@KASUGA_DIC_CSVNAME@"
 
+/* Kasuga BasicWors filename */
+#define KASUGA_BASICWORDS	"@KASUGA_BASICWORDS@"
+
 /* Genji Yomi dictionary filename */
 #define GENJI_YOMIDIC_NAME	"@GENJI_YOMIDIC_NAME@"
 

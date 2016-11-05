@@ -21,6 +21,8 @@
 
 #include <iostream>
 #include <string>
+#include <fstream>
+#include <sstream>
 #include <unistd.h>
 #include "aoi.h"
 #include "fujitsubo.hh"
@@ -76,6 +78,50 @@ void regist()
 	fjtb.Build();
 }
 
+void registBasicWords()
+{
+	std::string text;
+	Fujitsubo fjtb;
+
+	fjtb.RegistBasicWords();
+	fjtb.Build();
+}
+
+void registSkkDic(char *skkdic)
+{
+	int cnt = 0;
+	std::string low;
+	std::string token;
+	std::string entry;
+	std::string yomi;
+	std::ifstream ifs(skkdic);
+	std::istringstream iss(low);
+	Fujitsubo fjtb;
+
+	while (std::getline(ifs, low)) {
+		// 「;」を見つけたら次の行
+		if (low.find(";;") == 0)
+			continue;
+
+		iss.str(low);
+		while (std::getline(iss, token, '/')) {
+			switch (cnt) {
+			case 0:
+				entry = token;
+				break;
+			case 1:
+				yomi = token;
+				break;
+			}
+			cnt++;
+		}
+		std::cout << entry << ": " << yomi << std::endl;
+		fjtb.RegistWord(entry, yomi);
+		iss.clear();
+		cnt = 0;
+	}
+}
+
 int main(int argc,char *argv[])
 {
 	int mode = 0;
@@ -83,7 +129,7 @@ int main(int argc,char *argv[])
 	std::string str, outstr;
 	AOI_STR *aoistr;
 
-	while((opt = getopt(argc, argv, "cr")) != -1){
+	while((opt = getopt(argc, argv, "crbs:")) != -1){
 		switch(opt){
 		// かな漢字変換モード
 		case 'c':
@@ -93,6 +139,17 @@ int main(int argc,char *argv[])
 		// 辞書登録モード ※入力はパイプから
 		case 'r':
 			regist();
+			break;
+
+		// 基本文字登録モード
+		case 'b':
+			std::cout << "<< 基本文字登録モード >>" << std::endl;
+			registBasicWords();
+			break;
+
+		// SKK辞書登録モード
+		case 's':
+//			registSkkDic(optarg); // いろいろ問題があるのでとりあえずコメントアウト
 			break;
 
 		default:
