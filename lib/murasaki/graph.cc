@@ -36,7 +36,7 @@ int Graph::Initialize(ux::Map<GNJ_MAPVAL> *gnjYomiMap, const char *instr)
 	// Create Index
 	tmp.strIdx = 0;
 	tmp.strLen = 0;
-	tmp.maxProb = 0;
+	tmp.minProb = 0;
 	pos.push_back(tmp);
 
 	// for UTF-8
@@ -93,20 +93,20 @@ void Graph::Construct(ux::Trie *gnjWordTrie, std::string &outStr)
 			if (pos[i].strLen != pos[i].node[j].len) {
 				for (k = 0; k < i; k++) {
 					if (pos[i].strLen == (pos[k].strLen + pos[i].node[j].len)) {
-						compWord = pos[k].maxWord + gnjWordTrie->decodeKey(pos[i].node[j].id);
-						compProb = pos[k].maxProb * pos[i].node[j].prob;
+						compWord = pos[k].minWord + gnjWordTrie->decodeKey(pos[i].node[j].id);
+						compProb = pos[k].minProb * pos[i].node[j].prob;
 						break;
 					}
 				}
 			}
 
 			// これまでの探索結果と比較
-			if (pos[i].maxProb < compProb) {
-				pos[i].maxWord = compWord;
-				pos[i].maxProb = compProb;
+			if ((pos[i].minProb == 0) || (compProb < pos[i].minProb)) {
+				pos[i].minWord = compWord;
+				pos[i].minProb = compProb;
 			}
 		}
-		outStr = pos[i].maxWord;
+		outStr = pos[i].minWord;
 	}
 }
 

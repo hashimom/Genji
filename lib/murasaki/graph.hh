@@ -31,8 +31,8 @@ typedef struct {
 	std::vector<GNJ_MAPVAL> node;
 	int strIdx;
 	int strLen;
-	std::string maxWord;
-	double maxProb;
+	std::string minWord;
+	double minProb;
 } MRSK_NODES;
 
 class Graph {
