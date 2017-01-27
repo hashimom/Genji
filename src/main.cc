@@ -78,15 +78,7 @@ void regist()
 	fjtb.Build();
 }
 
-void registBasicWords()
-{
-	std::string text;
-	Fujitsubo fjtb;
-
-	fjtb.RegistBasicWords();
-	fjtb.Build();
-}
-
+#if 0
 void registSkkDic(char *skkdic)
 {
 	int cnt = 0;
@@ -121,6 +113,7 @@ void registSkkDic(char *skkdic)
 		cnt = 0;
 	}
 }
+#endif
 
 int main(int argc,char *argv[])
 {
@@ -129,31 +122,23 @@ int main(int argc,char *argv[])
 	std::string str, outstr;
 	AOI_STR *aoistr;
 
-	while((opt = getopt(argc, argv, "crbs:")) != -1){
+	while((opt = getopt(argc, argv, "cr")) != -1){
 		switch(opt){
-		// かな漢字変換モード
-		case 'c':
-			kanakan();
-			break;
-
-		// 辞書登録モード ※入力はパイプから
+		// 辞書登録モード
 		case 'r':
 			regist();
 			break;
 
-		// 基本文字登録モード
-		case 'b':
-			std::cout << "<< 基本文字登録モード >>" << std::endl;
-			registBasicWords();
-			break;
-
 		// SKK辞書登録モード
-		case 's':
+//		case 's':
 //			registSkkDic(optarg); // いろいろ問題があるのでとりあえずコメントアウト
-			break;
+//			break;
 
+		// かな漢字変換モード
+		case 'c':
 		default:
 			std::cout << "Usage / c:かな漢字変換 r:辞書登録" << std::endl;
+			kanakan();
 			break;
 		}
 	}

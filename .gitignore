@@ -30,5 +30,5 @@
 # for make
 build/
 dic/*
-
+include/config.h
 

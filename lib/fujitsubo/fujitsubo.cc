@@ -50,25 +50,10 @@ int Fujitsubo::Regist(std::string text)
 	return(corpus.Regist(text));
 }
 
-void Fujitsubo::RegistWord(std::string entry, std::string yomi)
-{
-	corpus.RegistWord(entry, yomi);
-}
-
-void Fujitsubo::RegistBasicWords()
-{
-	std::ifstream ifs(KASUGA_BASICWORDS);
-	std::string str;
-	while (std::getline(ifs, str)) {
-		corpus.RegistWord(str, str);
-	}
-}
-
-
 int Fujitsubo::Build()
 {
 	int cnt = 0;
-	std::string row;
+	std::string token;
 	KSG_DIC tmpDicVal;
 	std::vector<KSG_DIC> ksgDic;
 
@@ -81,8 +66,8 @@ int Fujitsubo::Build()
 	}
 
 	/* Dic read from Kasuga CSV file */
-	while (std::getline(ifs, row)) {
-		readKsgDic(row.c_str(), tmpDicVal);
+	while (std::getline(ifs, token)) {
+		readKsgDic(token.c_str(), tmpDicVal);
 		ksgDic.push_back(tmpDicVal);
 	}
 
