@@ -31,109 +31,93 @@
 #include "config.h"
 #include "fujitsubo.hh"
 
-using namespace Kasuga;
-
 namespace Genji {
 
-Fujitsubo::Fujitsubo()
-{
-	corpus.Open(KASUGA_DBNAME, KASUGA_CPS_CSVNAME);
-}
+Fujitsubo::Fujitsubo() {}
 
-Fujitsubo::~Fujitsubo()
-{
-	corpus.Close();
-}
-
-int Fujitsubo::Regist(std::string text)
-{
-	return(corpus.Regist(text));
-}
+Fujitsubo::~Fujitsubo() {}
 
 int Fujitsubo::Build()
 {
-	int cnt = 0;
-	std::string token;
-	KSG_DIC tmpDicVal;
-	std::vector<KSG_DIC> ksgDic;
+    int cnt = 0;
+    std::string token;
+    KSG_DIC tmpDicVal;
+    std::vector<KSG_DIC> ksgDic;
 
-	corpus.Get(KASUGA_DIC_CSVNAME);
+    std::ifstream ifs(KASUGA_DIC_CSVNAME);
+    if (!ifs) {
+        std::cout << "Error:Input data file not found" << std::endl;
+        return(-1);
+    }
 
-	std::ifstream ifs(KASUGA_DIC_CSVNAME);
-	if (!ifs) {
-		std::cout << "Error:Input data file not found" << std::endl;
-		return(-1);
-	}
+    // Dic read from Kasuga CSV file
+    while (std::getline(ifs, token)) {
+        readKsgDic(token.c_str(), tmpDicVal);
+        ksgDic.push_back(tmpDicVal);
+    }
 
-	/* Dic read from Kasuga CSV file */
-	while (std::getline(ifs, token)) {
-		readKsgDic(token.c_str(), tmpDicVal);
-		ksgDic.push_back(tmpDicVal);
-	}
+    // Build wordTrie
+    cnt = buildTrie(ksgDic);
 
-	/* Build wordTrie */
-	cnt = buildTrie(ksgDic);
-
-	return(cnt);
+    return(cnt);
 }
 
 void Fujitsubo::readKsgDic(const char *instr, KSG_DIC &out)
 {
-	std::string token;
-	std::stringstream ss;
-	int cnt = 0;
-	std::istringstream iss(instr);
+    std::string token;
+    std::stringstream ss;
+    int cnt = 0;
+    std::istringstream iss(instr);
 
-	while (std::getline(iss, token, ',')) {
-		switch (cnt) {
-		case 0:
-			ss << token;
-			ss >> out.prob;
-			break;
-		case 1:
-			out.word = token;
-			break;
-		case 2:
-			out.yomi = token;
-			break;
-		}
-		cnt++;
-	}
+    while (std::getline(iss, token, ',')) {
+        switch (cnt) {
+            case 0:
+                ss << token;
+                ss >> out.prob;
+                break;
+            case 1:
+                out.word = token;
+                break;
+            case 2:
+                out.yomi = token;
+                break;
+        }
+        cnt++;
+    }
 }
 
 int Fujitsubo::buildTrie(std::vector<KSG_DIC> &ksgDic)
 {
-	int i;
-	size_t len;
-	GNJ_MAPVAL tmpMapVal;
-	std::vector<std::string> wordList;
-	std::map<std::string, GNJ_MAPVAL> yomiList;
-	ux::Map<GNJ_MAPVAL> gnjYomiMap;
-	std::ofstream gnjYomiDicOfs(GENJI_YOMIDIC_NAME);
-	std::ofstream gnjWordDicOfs(GENJI_WORDDIC_NAME);
+    int i;
+    size_t len;
+    GNJ_MAPVAL tmpMapVal;
+    std::vector<std::string> wordList;
+    std::map<std::string, GNJ_MAPVAL> yomiList;
+    ux::Map<GNJ_MAPVAL> gnjYomiMap;
+    std::ofstream gnjYomiDicOfs(GENJI_YOMIDIC_NAME);
+    std::ofstream gnjWordDicOfs(GENJI_WORDDIC_NAME);
 
-	// build Word Trie
-	for (i = 0; i < ksgDic.size(); i++) {
-		wordList.push_back(ksgDic[i].word);
-	}
-	ux::Trie gnjWordTrie(wordList);
-	gnjWordTrie.save(gnjWordDicOfs);
+    // build Word Trie
+    for (i = 0; i < ksgDic.size(); i++) {
+        wordList.push_back(ksgDic[i].word);
+    }
+    ux::Trie gnjWordTrie(wordList);
+    gnjWordTrie.save(gnjWordDicOfs);
 
-
-	// build Yomi Map
-	for (i = 0; i < ksgDic.size(); i++) {
-		tmpMapVal.id = gnjWordTrie.prefixSearch(ksgDic[i].word.c_str(), ksgDic[i].word.length(), len);
-		tmpMapVal.len = ksgDic[i].yomi.length();
-		tmpMapVal.prob = ksgDic[i].prob;
-		yomiList[ksgDic[i].yomi] = tmpMapVal;
+    // build Yomi Map
+    for (i = 0; i < ksgDic.size(); i++) {
+        tmpMapVal.id = gnjWordTrie.prefixSearch(ksgDic[i].word.c_str(), ksgDic[i].word.length(), len);
+        tmpMapVal.len = ksgDic[i].yomi.length();
+        tmpMapVal.prob = ksgDic[i].prob;
+        yomiList[ksgDic[i].yomi] = tmpMapVal;
 //		std::cout << ksgDic[i].yomi << "/"
 //				<< ksgDic[i].word << ", "
 //				<<  ksgDic[i].prob << std::endl;
-	}
-	gnjYomiMap.build(yomiList);
-	gnjYomiMap.save(gnjYomiDicOfs);
+    }
+    gnjYomiMap.build(yomiList);
+    gnjYomiMap.save(gnjYomiDicOfs);
 
-	return(i);
+    return(i);
 }
 
 } // namespace Genji

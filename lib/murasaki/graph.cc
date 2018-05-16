@@ -94,7 +94,7 @@ void Graph::Construct(ux::Trie *gnjWordTrie, std::string &outStr)
 				for (k = 0; k < i; k++) {
 					if (pos[i].strLen == (pos[k].strLen + pos[i].node[j].len)) {
 						compWord = pos[k].minWord + gnjWordTrie->decodeKey(pos[i].node[j].id);
-						compProb = pos[k].minProb * pos[i].node[j].prob;
+						compProb = pos[k].minProb + pos[i].node[j].prob;
 						break;
 					}
 				}

@@ -32,117 +32,72 @@ using namespace Genji;
 
 void kanakan()
 {
-	int i;
-	std::string str, outstr;
-	AOI_STR *aoistr;
+    int i;
+    std::string str, outstr;
+    AOI_STR *aoistr;
 
-	Murasaki mrsk;
-	mrsk.Open();
+    Murasaki mrsk;
+    mrsk.Open();
 
-	aoistr = aoi_new();
+    aoistr = aoi_new();
 
-	while (1) {
-		std::cout << "源氏: かな漢字変換モード(quit: !q))" << std::endl;
-		std::cin >> str;
+    while (1) {
+        std::cout << "源氏: かな漢字変換モード(quit: !q))" << std::endl;
+        std::cin >> str;
 
-		/* 終了 */
-		if (str == "!q") {
-			break;
-		}
-		/* クリア */
-		if (str == "!c") {
-			aoi_clear(aoistr);
-			std::cout << "【文字列クリア】" << std::endl;
-		}
-		/* 変換 */
-		else {
-			for (i = 0; i < str.length(); i++) {
-				aoi_input(aoistr, str.at(i));
-				mrsk.Convert((const char*)aoistr->workstr, outstr);
-			}
-			std::cout << aoistr->workstr << std::endl;
-			std::cout << outstr << std::endl;
-		}
-	}
+        // 終了
+        if (str == "!q") {
+            break;
+        }
+        // クリア
+        if (str == "!c") {
+            aoi_clear(aoistr);
+            std::cout << "【文字列クリア】" << std::endl;
+        }
+		// 変換
+        else {
+            for (i = 0; i < str.length(); i++) {
+                aoi_input(aoistr, str.at(i));
+                mrsk.Convert((const char*)aoistr->workstr, outstr);
+            }
+            std::cout << aoistr->workstr << std::endl;
+            std::cout << outstr << std::endl;
+        }
+    }
 }
 
-void regist()
+void build()
 {
-	std::string text;
-	Fujitsubo fjtb;
+    std::string text;
+    Fujitsubo fjtb;
 
-	while(getline(std::cin, text)) {
-		fjtb.Regist(text);
-	}
-
-	fjtb.Build();
+    fjtb.Build();
 }
 
-#if 0
-void registSkkDic(char *skkdic)
-{
-	int cnt = 0;
-	std::string low;
-	std::string token;
-	std::string entry;
-	std::string yomi;
-	std::ifstream ifs(skkdic);
-	std::istringstream iss(low);
-	Fujitsubo fjtb;
-
-	while (std::getline(ifs, low)) {
-		// 「;」を見つけたら次の行
-		if (low.find(";;") == 0)
-			continue;
-
-		iss.str(low);
-		while (std::getline(iss, token, '/')) {
-			switch (cnt) {
-			case 0:
-				entry = token;
-				break;
-			case 1:
-				yomi = token;
-				break;
-			}
-			cnt++;
-		}
-		std::cout << entry << ": " << yomi << std::endl;
-		fjtb.RegistWord(entry, yomi);
-		iss.clear();
-		cnt = 0;
-	}
-}
-#endif
 
 int main(int argc,char *argv[])
 {
-	int mode = 0;
-	int opt;
-	std::string str, outstr;
-	AOI_STR *aoistr;
+    int mode = 0;
+    int opt;
+    std::string str, outstr;
+    AOI_STR *aoistr;
 
-	while((opt = getopt(argc, argv, "cr")) != -1){
-		switch(opt){
-		// 辞書登録モード
-		case 'r':
-			regist();
-			break;
+    while((opt = getopt(argc, argv, "cb")) != -1){
+        switch(opt){
+            // 辞書登録モード
+            case 'b':
+                build();
+                break;
 
-		// SKK辞書登録モード
-//		case 's':
-//			registSkkDic(optarg); // いろいろ問題があるのでとりあえずコメントアウト
-//			break;
+            // かな漢字変換モード
+            case 'c':
+            default:
+                std::cout << "Usage / c:かな漢字変換 r:辞書登録" << std::endl;
+                kanakan();
+                break;
+        }
+    }
 
-		// かな漢字変換モード
-		case 'c':
-		default:
-			std::cout << "Usage / c:かな漢字変換 r:辞書登録" << std::endl;
-			kanakan();
-			break;
-		}
-	}
-
-	std::cout << "お疲れ様でした！" << std::endl;
-	return(0);
+    std::cout << "お疲れ様でした！" << std::endl;
+    return(0);
 }

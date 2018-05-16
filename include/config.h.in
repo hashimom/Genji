@@ -23,12 +23,6 @@
 #ifndef INCLUDE_CONFIG_H_IN_
 #define INCLUDE_CONFIG_H_IN_
 
-/* Kasuga DB filename */
-#define KASUGA_DBNAME		"@KASUGA_DBNAME@"
-
-/* Kasuga corpus filename */
-#define KASUGA_CPS_CSVNAME	"@KASUGA_CPS_CSVNAME@"
-
 /* Kasuga dictionary filename */
 #define KASUGA_DIC_CSVNAME	"@KASUGA_DIC_CSVNAME@"
 

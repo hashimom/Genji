@@ -32,3 +32,5 @@ build/
 dic/*
 include/config.h
 
+# for CLion
+.idea/

@@ -2,11 +2,7 @@ cmake_minimum_required(VERSION 2.8)
 PROJECT(Genji)
 
 SET(GENJI_DIC_HOME     "${CMAKE_HOME_DIRECTORY}/dic/")
-SET(KASUGA_DBNAME      "${GENJI_DIC_HOME}/kasuga.db")
-SET(KASUGA_CPS_CSVNAME "${GENJI_DIC_HOME}/kasugacps.csv")
-SET(KASUGA_DIC_CSVNAME "${GENJI_DIC_HOME}/kasugadic.csv")
-SET(GENJI_BASICWORDS   "${CMAKE_SOURCE_DIR}/lib/fujitsubo/basic_words.txt")
-SET(GENJI_BASICNAIST   "${CMAKE_SOURCE_DIR}/lib/fujitsubo/basic_naist-jdic.csv")
+SET(KASUGA_DIC_CSVNAME "${GENJI_DIC_HOME}/genjidic.csv")
 SET(GENJI_YOMIDIC_NAME "${GENJI_DIC_HOME}/genji_yomidic.dat")
 SET(GENJI_WORDDIC_NAME "${GENJI_DIC_HOME}/genji_worddic.dat")
 
