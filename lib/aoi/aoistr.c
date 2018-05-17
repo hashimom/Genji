@@ -19,66 +19,69 @@
  * SOFTWARE.
 */
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include "aoi.h"
 
 AOI_STR *aoi_str_new(AOI_DIC *dic, int bufsize)
 {
-	AOI_STR *retstr = NULL;
+    AOI_STR *retstr = NULL;
 
-	retstr = calloc(1, sizeof(AOI_STR));
-	if (retstr != NULL) {
-		retstr->dic = dic;
+    retstr = calloc(1, sizeof(AOI_STR));
+    if (retstr != NULL) {
+        retstr->dic = dic;
 
-		/* calloc work buf */
-		retstr->workstr = calloc(bufsize, sizeof(char));
-		if (retstr->workstr == NULL) {
-			free(retstr);
-			retstr = NULL;
-		}
-	}
-	return(retstr);
+        /* calloc work buf */
+        retstr->workstr = calloc(bufsize, sizeof(char));
+        if (retstr->workstr == NULL) {
+            free(retstr);
+            retstr = NULL;
+        }
+    }
+    return(retstr);
 }
 
 void aoi_str_delete(AOI_STR *strp)
 {
-	if (strp != NULL) {
-		if (strp->workstr != NULL)
-			free(strp->workstr);
-		free(strp);
-	}
+    if (strp != NULL) {
+        if (strp->workstr != NULL) {
+            strp->workstr[0] = '\0';
+        }
+        strp->curpos = 0;
+        strp->nodepos = 0;
+    }
 }
 
 int aoi_strlen(uint8_t *str)
 {
-	int ret = 0;
-	int i = 0;
-	int strsize = strlen(str);
+    int ret = 0;
+    int i = 0;
+    int strsize = strlen(str);
 
-	while(i < strsize){
-		if (str[i] < 0x80)
-			i += 1;
-		else if(str[i] < 0xE0)
-			i += 2;
-		else if(str[i] < 0xF0)
-			i += 3;
-		else if(str[i] < 0xF8)
-			i += 4;
-		else if(str[i] < 0xFC)
-			i += 5;
-		else if(str[i] < 0xFE)
-			i += 6;
-		else
-			i += 0;
-		ret++;
-	}
-	return(ret);
+    while(i < strsize){
+        if (str[i] < 0x80)
+            i += 1;
+        else if(str[i] < 0xE0)
+            i += 2;
+        else if(str[i] < 0xF0)
+            i += 3;
+        else if(str[i] < 0xF8)
+            i += 4;
+        else if(str[i] < 0xFC)
+            i += 5;
+        else if(str[i] < 0xFE)
+            i += 6;
+        else
+            i += 0;
+        ret++;
+    }
+    return(ret);
 }
 
 int aoi_update_worklen(AOI_STR *strp)
 {
-	strp->curpos = aoi_strlen(strp->workstr);
-	return(strp->curpos);
+    strp->curpos = aoi_strlen(strp->workstr);
+    return(strp->curpos);
 }
 

@@ -31,39 +31,38 @@ static AOI_DIC *aoidic = NULL;
 
 AOI_STR *aoi_new()
 {
-	AOI_STR *ret_p = NULL;
+    AOI_STR *ret_p = NULL;
 
-	aoidic = aoi_dic_new_keymap();
-	if (aoidic != NULL) {
-		ret_p = aoi_str_new(aoidic, AOI_MAX_TEXT_BUF);
-		if (ret_p == NULL) {
-			aoi_dic_delete(aoidic);
-		}
-	}
-	return(ret_p);
+    aoidic = aoi_dic_new_keymap();
+    if (aoidic != NULL) {
+        ret_p = aoi_str_new(aoidic, AOI_MAX_TEXT_BUF);
+        if (ret_p == NULL) {
+            aoi_dic_delete(aoidic);
+        }
+    }
+    return(ret_p);
 }
 
 void aoi_input(AOI_STR *aoistr, const char inkey)
 {
-	aoi_conv_input(aoistr, (uint8_t)inkey);
+    aoi_conv_input(aoistr, (uint8_t)inkey);
 }
 
 void aoi_convert(AOI_STR *aoistr, const char *instr)
 {
-	int i;
-	int len = strlen(instr);
-	aoi_clear(aoistr);
-	for (i = 0; i < len; i++) {
-		aoi_conv_input(aoistr, (uint8_t)instr[i]);
-	}
+    int i;
+    int len = strlen(instr);
+    aoi_clear(aoistr);
+    for (i = 0; i < len; i++) {
+        aoi_conv_input(aoistr, (uint8_t)instr[i]);
+    }
 }
 
 void aoi_clear(AOI_STR *aoistr)
 {
-	if ((aoistr != NULL) && (aoidic != NULL)) {
-		aoi_str_delete(aoistr);
-		aoistr = aoi_str_new(aoidic, AOI_MAX_TEXT_BUF);
-	}
+    if ((aoistr != NULL) && (aoidic != NULL)) {
+        aoi_str_delete(aoistr);
+    }
 }
 
 
